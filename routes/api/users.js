@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        avatar: avatar,
+        avatar,
         password: req.body.password
       });
 
@@ -43,6 +43,31 @@ router.post('/register', (req, res) => {
         });
       });
     }
+  });
+});
+
+// @route   POST api/users/login
+// @desc    Login user / Returning JWT token
+// @access  Public
+router.post('/login', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // Find user by email
+  User.findOne({ email }).then(user => {
+    // Check for user
+    if (!user) {
+      return res.status(404).json({ email: 'User not found' });
+    }
+
+    // Check password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        res.json({ msg: 'Success' });
+      } else {
+        return res.status(400).json({ password: 'Password incorrect' });
+      }
+    });
   });
 });
 
