@@ -1,3 +1,6 @@
+# Visual Studio Code
+*.code-workspace
+
 /node_modules/
 package-lock.json
 
